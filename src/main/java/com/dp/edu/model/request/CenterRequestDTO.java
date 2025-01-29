@@ -9,6 +9,5 @@ public class CenterRequestDTO {
     private Integer provinceId;
     private Integer districtId;
     private String address;
-    private String userCode;
     private int pcCount;
 }
