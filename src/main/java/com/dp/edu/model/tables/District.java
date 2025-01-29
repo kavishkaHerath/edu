@@ -1,4 +1,4 @@
-package com.dp.edu.model;
+package com.dp.edu.model.tables;
 
 import jakarta.persistence.*;
 import lombok.Data;

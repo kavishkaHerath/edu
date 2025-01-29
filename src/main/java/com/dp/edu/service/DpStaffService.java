@@ -1,9 +1,9 @@
 package com.dp.edu.service;
 
-import com.dp.edu.model.Center;
-import com.dp.edu.model.District;
-import com.dp.edu.model.PC;
-import com.dp.edu.model.Province;
+import com.dp.edu.model.tables.Center;
+import com.dp.edu.model.tables.District;
+import com.dp.edu.model.tables.PC;
+import com.dp.edu.model.tables.Province;
 import com.dp.edu.model.request.CenterRequestDTO;
 import com.dp.edu.repository.CenterRepository;
 import com.dp.edu.repository.DistrictRepository;
