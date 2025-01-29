@@ -1,14 +1,9 @@
 package com.dp.edu.service;
 
-import com.dp.edu.model.tables.Center;
-import com.dp.edu.model.tables.District;
-import com.dp.edu.model.tables.PC;
-import com.dp.edu.model.tables.Province;
+import com.dp.edu.model.request.CenterInChargeDTO;
+import com.dp.edu.model.tables.*;
 import com.dp.edu.model.request.CenterRequestDTO;
-import com.dp.edu.repository.CenterRepository;
-import com.dp.edu.repository.DistrictRepository;
-import com.dp.edu.repository.PCRepository;
-import com.dp.edu.repository.ProvinceRepository;
+import com.dp.edu.repository.*;
 import com.dp.edu.response.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +27,15 @@ public class DpStaffService {
     @Autowired
     private final PCRepository pcRepository;
 
-    public DpStaffService(CenterRepository centerRepository, ProvinceRepository provinceRepository, DistrictRepository districtRepository, PCRepository pcRepository) {
+    @Autowired
+    private final CenterInChargeRepository centerInChargeRepository;
+
+    public DpStaffService(CenterRepository centerRepository, ProvinceRepository provinceRepository, DistrictRepository districtRepository, PCRepository pcRepository, CenterInChargeRepository centerInChargeRepository) {
         this.centerRepository = centerRepository;
         this.provinceRepository = provinceRepository;
         this.districtRepository = districtRepository;
         this.pcRepository = pcRepository;
+        this.centerInChargeRepository = centerInChargeRepository;
     }
 
     public ResponseEntity<ResponseMessage> addCenterWithPCs(CenterRequestDTO centerRequestDTO){
@@ -92,7 +91,8 @@ public class DpStaffService {
                     "Insert the center successfully.",
                     center.getCenterCode()
             ));
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return ResponseEntity.ok().body(new ResponseMessage(
                     "-1",
                     "Failed to insert center: " + e.getMessage(),
@@ -101,6 +101,54 @@ public class DpStaffService {
         }
     }
 
+    public ResponseEntity<ResponseMessage> addCenterInCharge(CenterInChargeDTO requestDTO){
+        try{
+            Center center = centerRepository.findById(requestDTO.getCenterCode())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Center Code"));
+            
+            if(centerInChargeRepository.existsByEmail(requestDTO.getEmail())){
+                return ResponseEntity.ok().body(new ResponseMessage(
+                        "-1",
+                        "CENTER IN CHARGE IS ALREADY INSERT",
+                        ""
+                        ));
+            }
+
+            var count = centerInChargeRepository.countByCenterCode(requestDTO.getCenterCode()) + 1;
+
+            CenterInCharge centerInCharge = getCenterInCharge(requestDTO, count, center);
+            centerInChargeRepository.save(centerInCharge);
+
+            return ResponseEntity.ok(new ResponseMessage(
+                    "0",
+                    "success",
+                    centerInCharge.getCenterInChargeCode()
+            ));
+        }
+        catch (Exception e){
+            return ResponseEntity.ok().body(new ResponseMessage(
+                    "-1",
+                    "Could not insert center in charge details: " + e.getMessage(),
+                    ""
+            ));
+        }
+    }
+
+    private static CenterInCharge getCenterInCharge(CenterInChargeDTO requestDTO, int count, Center center) {
+        var centerInChargeCode = "CIC" + requestDTO.getCenterCode() + String.format("%02d", count);
+
+        CenterInCharge centerInCharge = new CenterInCharge();
+
+
+        centerInCharge.setCenterInChargeCode(centerInChargeCode);
+        centerInCharge.setName(requestDTO.getName());
+        centerInCharge.setEmail(requestDTO.getEmail());
+        centerInCharge.setPhoneNumber(requestDTO.getPhoneNumber());
+        centerInCharge.setAddress(requestDTO.getAddress());
+        centerInCharge.setCenter(center);
+        centerInCharge.setUserCode("ADM000");
+        return centerInCharge;
+    }
 
 
 }
