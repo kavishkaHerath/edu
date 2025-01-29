@@ -1,41 +1,29 @@
-package com.dp.edu.model.tables;
+package com.dp.edu.model.request;
 
-import jakarta.persistence.*;
-import lombok.Data;
+import com.dp.edu.model.tables.Center;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@Entity
-@Table(name = "TBL_CENTER_IN_CHARGE")
-public class CenterInCharge {
-    @Id
-    @Column(name = "STR_CENTER_IN_CHARGE_CODE", nullable = false, length = 8)
+
+public class CenterInChargeDTO {
     private String centerInChargeCode;
-    @Column(name = "STR_NAME", nullable = false)
     private String name;
-    @Column(name = "STR_EMAIL", nullable = false, unique = true, length = 250)
     private String email;
-    @Column(name = "STR_PHONE", nullable = false, unique = true, length = 10)
     private String phoneNumber;
-    @Column(name = "STR_ADDRESS", nullable = false)
     private String address;
-
-    @ManyToOne
-    @JoinColumn(name = "STR_CENTER_CODE", referencedColumnName = "STR_CENTER_CODE", nullable = false)
-    private Center center;
-
-    @Column(name = "STR_USER_CODE", nullable = false, length = 8)
+    private String centerCode;
     private String userCode;
 
-    public CenterInCharge() {
+    public CenterInChargeDTO() {
     }
 
-    public CenterInCharge(String centerInChargeCode, String name, String email, String phoneNumber, String address, Center center, String userCode) {
+    public CenterInChargeDTO(String centerInChargeCode, String name, String email, String phoneNumber, String address, String centerCode, String userCode) {
         this.centerInChargeCode = centerInChargeCode;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        this.center = center;
+        this.centerCode = centerCode;
         this.userCode = userCode;
     }
 
@@ -79,12 +67,12 @@ public class CenterInCharge {
         this.address = address;
     }
 
-    public Center getCenter() {
-        return center;
+    public String getCenterCode() {
+        return centerCode;
     }
 
-    public void setCenter(Center center) {
-        this.center = center;
+    public void setCenterCode(String centerCode) {
+        this.centerCode = centerCode;
     }
 
     public String getUserCode() {
