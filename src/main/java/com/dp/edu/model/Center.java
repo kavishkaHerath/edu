@@ -24,7 +24,7 @@ public class Center {
     private District district; // Many-to-One relationship with District
 
 
-    @Column(name = "STR_ADDRESS", nullable = false, length = 255)
+    @Column(name = "STR_ADDRESS", nullable = false, length = 250)
     private String address;
 
 
@@ -34,4 +34,60 @@ public class Center {
     @Column(name = "DATE_CENTER_ADD_DATE", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date centerAddDate;
+
+    public String getCenterCode() {
+        return centerCode;
+    }
+
+    public void setCenterCode(String centerCode) {
+        this.centerCode = centerCode;
+    }
+
+    public String getCenterName() {
+        return centerName;
+    }
+
+    public void setCenterName(String centerName) {
+        this.centerName = centerName;
+    }
+
+    public Province getProvince() {
+        return province;
+    }
+
+    public void setProvince(Province province) {
+        this.province = province;
+    }
+
+    public District getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(District district) {
+        this.district = district;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getUserCode() {
+        return userCode;
+    }
+
+    public void setUserCode(String userCode) {
+        this.userCode = userCode;
+    }
+
+    public Date getCenterAddDate() {
+        return centerAddDate;
+    }
+
+    public void setCenterAddDate(Date centerAddDate) {
+        this.centerAddDate = centerAddDate;
+    }
 }
