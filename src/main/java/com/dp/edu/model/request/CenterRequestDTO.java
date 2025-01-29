@@ -10,5 +10,5 @@ public class CenterRequestDTO {
     private Integer districtId;
     private String address;
     private String userCode;
-    private int pcCount; // Number of PCs to be created
+    private int pcCount;
 }
