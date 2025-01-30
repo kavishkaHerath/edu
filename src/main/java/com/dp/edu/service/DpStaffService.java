@@ -31,12 +31,16 @@ public class DpStaffService {
     @Autowired
     private final CenterInChargeRepository centerInChargeRepository;
 
-    public DpStaffService(CenterRepository centerRepository, ProvinceRepository provinceRepository, DistrictRepository districtRepository, PCRepository pcRepository, CenterInChargeRepository centerInChargeRepository) {
+    @Autowired
+    private final UserRepository userRepository;
+
+    public DpStaffService(CenterRepository centerRepository, ProvinceRepository provinceRepository, DistrictRepository districtRepository, PCRepository pcRepository, CenterInChargeRepository centerInChargeRepository, UserRepository userRepository) {
         this.centerRepository = centerRepository;
         this.provinceRepository = provinceRepository;
         this.districtRepository = districtRepository;
         this.pcRepository = pcRepository;
         this.centerInChargeRepository = centerInChargeRepository;
+        this.userRepository = userRepository;
     }
     public ResponseEntity<ResponseMessage> addCenterWithPCs(CenterRequestDTO centerRequestDTO){
         try{
@@ -117,7 +121,10 @@ public class DpStaffService {
             var count = centerInChargeRepository.countByCenterCode(requestDTO.getCenterCode()) + 1;
 
             CenterInCharge centerInCharge = getCenterInCharge(requestDTO, count, center);
+            User user = getUser(requestDTO, centerInCharge.getCenterInChargeCode());
+
             centerInChargeRepository.save(centerInCharge);
+            userRepository.save(user);
 
             return ResponseEntity.ok(new ResponseMessage(
                     "0",
@@ -132,6 +139,16 @@ public class DpStaffService {
                     ""
             ));
         }
+    }
+
+    private static User getUser(CenterInChargeDTO requestDTO, String centerInChargeCode) {
+        User user = new User();
+        user.setUserCode(centerInChargeCode);
+        user.setUsername(requestDTO.getName());
+        user.setUserType("CIC");
+        user.setPassword(requestDTO.getCenterCode());
+        user.setEmail(requestDTO.getEmail());
+        return user;
     }
 
     private static CenterInCharge getCenterInCharge(CenterInChargeDTO requestDTO, int count, Center center) {
