@@ -1,12 +1,16 @@
 package com.dp.edu.controller;
 
+import com.dp.edu.model.output.PCsDetails;
 import com.dp.edu.model.request.CenterInChargeDTO;
 import com.dp.edu.model.request.CenterRequestDTO;
+import com.dp.edu.model.tables.PC;
 import com.dp.edu.response.ResponseMessage;
 import com.dp.edu.service.DpStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("dpStaff")
@@ -24,5 +28,11 @@ public class DpStaffController {
     @ResponseBody
     public ResponseEntity<ResponseMessage> addCenterInCharge(@RequestBody CenterInChargeDTO requestDTO) {
         return dpStaffService.addCenterInCharge(requestDTO);
+    }
+    @GetMapping(value = "/get/allPCsInCenter/{centerCode}")
+    @ResponseBody
+    public ResponseEntity<List<PCsDetails>> getPCDetailsByCenterCode(@PathVariable String centerCode) {
+        List<PCsDetails> pcDetails = dpStaffService.getAllPCsInCenter(centerCode);
+        return ResponseEntity.ok(pcDetails);
     }
 }
