@@ -1,5 +1,6 @@
 package com.dp.edu.service;
 
+import com.dp.edu.model.output.PCsDetails;
 import com.dp.edu.model.request.CenterInChargeDTO;
 import com.dp.edu.model.tables.*;
 import com.dp.edu.model.request.CenterRequestDTO;
@@ -37,7 +38,6 @@ public class DpStaffService {
         this.pcRepository = pcRepository;
         this.centerInChargeRepository = centerInChargeRepository;
     }
-
     public ResponseEntity<ResponseMessage> addCenterWithPCs(CenterRequestDTO centerRequestDTO){
         try{
             if(centerRepository.existsById(centerRequestDTO.getCenterCode())){
@@ -148,6 +148,21 @@ public class DpStaffService {
         centerInCharge.setCenter(center);
         centerInCharge.setUserCode("ADM000");
         return centerInCharge;
+    }
+
+    public List<PCsDetails> getAllPCsInCenter(String centerCode){
+        Center center = centerRepository.findById(centerCode)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Center Code"));
+        List<PCsDetails> pcsDetails = new ArrayList<>();
+        List<PC> pcs = pcRepository.findByCenter(center);
+        for (PC pc : pcs) {
+            PCsDetails pc1 = new PCsDetails();
+            pc1.setPcsCode(pc.getPcCode());
+            pc1.setRegisterDate(String.valueOf(pc.getRegistrationDate()));
+            pc1.setCenterCode(centerCode);
+            pcsDetails.add(pc1);
+        }
+        return pcsDetails;
     }
 
 
