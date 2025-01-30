@@ -165,5 +165,52 @@ public class DpStaffService {
         return pcsDetails;
     }
 
+    public ResponseEntity<ResponseMessage> addNewPCForCenter(PCsDetails pcsDetails){
+        try{
+            String centerCode = pcsDetails.getCenterCode();
+
+            Center center = centerRepository.findById(centerCode)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Center Code") );
+
+            String centerCodeInPC = pcsDetails.getPcsCode();
+            centerCodeInPC = centerCodeInPC.substring(2, 5);
+            if(centerCode.equals(centerCodeInPC)){
+                if(pcRepository.existsById(pcsDetails.getPcsCode())){
+                    return ResponseEntity.ok().body(new ResponseMessage(
+                            "-1",
+                            "THIS COMPUTER HAS ALREADY BEEN ADDED.",
+                            ""
+                    ));
+                }
+
+                PC newPc = new PC();
+
+                newPc.setPcCode(pcsDetails.getPcsCode());
+                newPc.setCenter(center);
+                newPc.setStatus(true);
+                newPc.setRegistrationDate(new Date());
+                pcRepository.save(newPc);
+                return ResponseEntity.ok(new ResponseMessage(
+                        "0",
+                        "success",
+                        ""
+                ));
+            }
+            else{
+                return ResponseEntity.ok().body(new ResponseMessage(
+                        "-1",
+                        "The PC code or center code you entered is invalid.",
+                        ""
+                ));
+            }
+        }catch (Exception e){
+            return ResponseEntity.ok().body(new ResponseMessage(
+                    "-1",
+                    "Could not insert center in charge details: " + e.getMessage(),
+                    ""
+            ));
+        }
+    }
+
 
 }

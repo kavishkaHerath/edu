@@ -35,4 +35,9 @@ public class DpStaffController {
         List<PCsDetails> pcDetails = dpStaffService.getAllPCsInCenter(centerCode);
         return ResponseEntity.ok(pcDetails);
     }
+    @PostMapping(value = "/insert/pcsInCenter")
+    @ResponseBody
+    public ResponseEntity<ResponseMessage> addNewPc(@RequestBody PCsDetails pCsDetails) {
+        return dpStaffService.addNewPCForCenter(pCsDetails);
+    }
 }
