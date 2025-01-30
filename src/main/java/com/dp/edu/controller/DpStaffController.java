@@ -17,7 +17,11 @@ import java.util.List;
 @CrossOrigin("*")
 public class DpStaffController {
     @Autowired
-    private DpStaffService dpStaffService;
+    private final DpStaffService dpStaffService;
+
+    public DpStaffController(DpStaffService dpStaffService) {
+        this.dpStaffService = dpStaffService;
+    }
 
     @PostMapping(value = "/insert/center")
     @ResponseBody
