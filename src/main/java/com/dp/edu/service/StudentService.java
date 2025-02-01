@@ -26,11 +26,14 @@ public class StudentService {
                     ));
                 }
                 var center = student.getCenter().getCenterCode();
-            return ResponseEntity.ok().body(new ResponseMessage(
+                var studentCount = studentRepository.countByCenterCode(center);
+                System.out.println(studentCount);
+
+                return ResponseEntity.ok().body(new ResponseMessage(
                     "0",
                     "STUDENT ALREADY INSERT",
                     ""
-            ));
+                ));
         }
         catch (Exception e){
             return ResponseEntity.ok().body(new ResponseMessage(
