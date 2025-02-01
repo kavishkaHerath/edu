@@ -1,9 +1,6 @@
 package com.dp.edu.model.tables;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "TBL_USERS")
@@ -20,15 +17,23 @@ public class User {
     @Column(name = "STR_EMAIL", nullable = false, unique = true)
     private String email;
 
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private CenterInCharge centerInCharge;
+
+    @OneToOne
+    @JoinColumn(name = "STR_CENTER_IN_CHARGE_CODE", referencedColumnName = "STR_CENTER_IN_CHARGE_CODE")
+    private CenterInCharge centerInCharge;
+
     public User() {
     }
 
-    public User(String userCode, String username, String userType, String password, String email) {
+    public User(String userCode, String username, String userType, String password, String email, CenterInCharge centerInCharge) {
         this.userCode = userCode;
         this.username = username;
         this.userType = userType;
         this.password = password;
         this.email = email;
+        this.centerInCharge = centerInCharge;
     }
 
     public String getUserCode() {
@@ -69,5 +74,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public CenterInCharge getCenterInCharge() {
+        return centerInCharge;
+    }
+
+    public void setCenterInCharge(CenterInCharge centerInCharge) {
+        this.centerInCharge = centerInCharge;
     }
 }

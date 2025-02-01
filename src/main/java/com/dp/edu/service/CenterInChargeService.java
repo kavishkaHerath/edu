@@ -22,11 +22,12 @@ public class CenterInChargeService {
                 User user = userRepository.findByEmail(email);
                 var userType = user.getUserType();
                 if(userType.equals("CIC")){
+
                     return new LoginDetails(
                             user.getUserCode(),
                             user.getUsername(),
                             user.getUserType(),
-                            "sdas",
+                            user.getCenterInCharge().getCenter().getCenterCode(),
                             "adsd",
                             "0",
                             "success"

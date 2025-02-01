@@ -121,7 +121,7 @@ public class DpStaffService {
             var count = centerInChargeRepository.countByCenterCode(requestDTO.getCenterCode()) + 1;
 
             CenterInCharge centerInCharge = getCenterInCharge(requestDTO, count, center);
-            User user = getUser(requestDTO, centerInCharge.getCenterInChargeCode());
+            User user = getUser(requestDTO, centerInCharge.getCenterInChargeCode(), centerInCharge);
 
             centerInChargeRepository.save(centerInCharge);
             userRepository.save(user);
@@ -141,13 +141,14 @@ public class DpStaffService {
         }
     }
 
-    private static User getUser(CenterInChargeDTO requestDTO, String centerInChargeCode) {
+    private static User getUser(CenterInChargeDTO requestDTO, String centerInChargeCode, CenterInCharge centerInCharge) {
         User user = new User();
         user.setUserCode(centerInChargeCode);
         user.setUsername(requestDTO.getName());
         user.setUserType("CIC");
         user.setPassword(requestDTO.getCenterCode());
         user.setEmail(requestDTO.getEmail());
+        user.setCenterInCharge(centerInCharge);
         return user;
     }
 
