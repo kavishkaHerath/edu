@@ -1,10 +1,11 @@
 package com.dp.edu.model.tables;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
 
+@Data
 @Entity
 @Table(name = "TBL_STUDENTS")
 public class Student {
@@ -29,6 +30,8 @@ public class Student {
     @Column(name = "DATE_ADD_DATE", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date addDate;
+
+
 
 
 
