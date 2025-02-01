@@ -1,39 +1,62 @@
 package com.dp.edu.service;
 
-import com.dp.edu.repository.CenterInChargeRepository;
+import com.dp.edu.model.output.LoginDetails;
+import com.dp.edu.model.tables.Center;
+import com.dp.edu.model.tables.User;
 import com.dp.edu.repository.UserRepository;
-import com.dp.edu.response.ResponseMessage;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CenterInChargeService {
     @Autowired
-    private final UserRepository UserRepository;
+    private final UserRepository userRepository;
 
-    public CenterInChargeService(UserRepository UserRepository) {
-        this.UserRepository = UserRepository;
+    public CenterInChargeService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public String login(String email, String psw){
-        Gson gson = new Gson();
-        if(UserRepository.existsByEmail(email)){
-            ResponseMessage rs = new ResponseMessage(
-                    "0",
-                    "VALID EMAIL",
-                    email
-            );
-            return gson.toJson(rs);
-
+    public LoginDetails login(String email, String psw){
+        if(userRepository.existsByEmail(email)){
+            if (userRepository.existsByPasswordAndEmail(psw, email)){
+                User user = userRepository.findByEmail(email);
+                var userType = user.getUserType();
+                if(userType.equals("CIC")){
+                    return new LoginDetails(
+                            user.getUserCode(),
+                            user.getUsername(),
+                            user.getUserType(),
+                            "sdas",
+                            "adsd",
+                            "0",
+                            "success"
+                    );
+                }
+                else{
+                    return new LoginDetails(
+                            user.getUserCode(),
+                            user.getUsername(),
+                            user.getUserType(),
+                            "",
+                            "",
+                            "0",
+                            "success"
+                    );
+                }
+            }
+            else{
+                return new LoginDetails(
+                        "", "", "", "", "",
+                        "-1",
+                        "INVALID PASSWORD"
+                );
+            }
         }else{
-            ResponseMessage rs = new ResponseMessage(
+            return new LoginDetails(
+                    "", "", "", "", "",
                     "-1",
-                    "INVALID EMAIL",
-                    email
+                    "INVALID EMAIL"
             );
-            return gson.toJson(rs);
         }
     }
 
