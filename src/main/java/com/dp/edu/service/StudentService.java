@@ -2,8 +2,10 @@ package com.dp.edu.service;
 
 import com.dp.edu.model.request.StudentDTO;
 import com.dp.edu.model.tables.Center;
+import com.dp.edu.model.tables.PC;
 import com.dp.edu.model.tables.Student;
 import com.dp.edu.repository.CenterRepository;
+import com.dp.edu.repository.PCRepository;
 import com.dp.edu.repository.StudentRepository;
 import com.dp.edu.response.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,12 @@ public class StudentService {
     @Autowired
     private final CenterRepository centerRepository;
 
-    public StudentService(StudentRepository studentRepository, CenterRepository centerRepository) {
+    @Autowired final PCRepository pcRepository;
+
+    public StudentService(StudentRepository studentRepository, CenterRepository centerRepository, PCRepository pcRepository) {
         this.studentRepository = studentRepository;
         this.centerRepository = centerRepository;
+        this.pcRepository = pcRepository;
     }
 
     public ResponseEntity<ResponseMessage> createStudent(StudentDTO inputStudent){
@@ -64,6 +69,36 @@ public class StudentService {
             return ResponseEntity.ok().body(new ResponseMessage(
                     "-1",
                     "Failed to insert student: " + e.getMessage(),
+                    ""
+            ));
+        }
+    }
+
+    public ResponseEntity<ResponseMessage> insertStudentAttendance(StudentDTO inputStudent){
+        try {
+            String centerCode = inputStudent.getPcCode().substring(2,5);
+
+            //first check center is open or not
+                //---------------
+                //-----------------
+                //-------------
+            Center center = centerRepository.findById(centerCode).orElseThrow(
+                    () -> new IllegalArgumentException("Invalid Center.")
+            );
+            PC pc = pcRepository.findById(inputStudent.getPcCode()).orElseThrow(
+                    () -> new IllegalArgumentException("INVALID PC CODE")
+            );
+            return ResponseEntity.ok().body(new ResponseMessage(
+                    "0",
+                    "success",
+                    "center code " + center.getCenterCode() +" and pc code: " + pc.getPcCode()
+            ));
+
+        }
+        catch (Exception e){
+            return ResponseEntity.ok().body(new ResponseMessage(
+                    "-1",
+                    "Failed to insert student attendance: " + e.getMessage(),
                     ""
             ));
         }
