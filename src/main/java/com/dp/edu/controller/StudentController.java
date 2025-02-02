@@ -25,4 +25,10 @@ public class StudentController {
     public ResponseEntity<ResponseMessage> createStudents(@RequestBody StudentDTO student){
         return studentService.createStudent(student);
     }
+
+    @PostMapping(value = "/insert/student/attendanceIn")
+    @ResponseBody
+    public ResponseEntity<ResponseMessage> insertStudentAttendance(@RequestBody StudentDTO student){
+        return studentService.insertStudentAttendance(student);
+    }
 }
