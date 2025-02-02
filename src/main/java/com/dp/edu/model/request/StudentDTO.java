@@ -11,6 +11,8 @@ public class StudentDTO {
     private String phoneNumber;
     private String parentPhoneNumber;
     private String address;
+    private String pcCode;
+    private String attendanceCode;
 
     public StudentDTO() {
     }
@@ -23,6 +25,11 @@ public class StudentDTO {
         this.phoneNumber = phoneNumber;
         this.parentPhoneNumber = parentPhoneNumber;
         this.address = address;
+    }
+
+    public StudentDTO(String pcCode, String attendanceCode) {
+        this.pcCode = pcCode;
+        this.attendanceCode = attendanceCode;
     }
 
     public String getStudentCode() {
@@ -79,5 +86,21 @@ public class StudentDTO {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPcCode() {
+        return pcCode;
+    }
+
+    public void setPcCode(String pcCode) {
+        this.pcCode = pcCode;
+    }
+
+    public String getAttendanceCode() {
+        return attendanceCode;
+    }
+
+    public void setAttendanceCode(String attendanceCode) {
+        this.attendanceCode = attendanceCode;
     }
 }
