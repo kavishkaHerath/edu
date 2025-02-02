@@ -88,10 +88,19 @@ public class StudentService {
             PC pc = pcRepository.findById(inputStudent.getPcCode()).orElseThrow(
                     () -> new IllegalArgumentException("INVALID PC CODE")
             );
+            if(!studentRepository.existsByEmail(inputStudent.getEmail())){
+                return ResponseEntity.ok().body(new ResponseMessage(
+                        "-1",
+                        "STUDENT EMAIL IS INVALID",
+                        ""
+                ));
+            }
+
+            Student student = studentRepository.findByEmail(inputStudent.getEmail());
             return ResponseEntity.ok().body(new ResponseMessage(
                     "0",
                     "success",
-                    "center code " + center.getCenterCode() +" and pc code: " + pc.getPcCode()
+                    "center code " + center.getCenterCode() +" and pc code: " + pc.getPcCode() + " Student: " + student.getName()
             ));
 
         }
